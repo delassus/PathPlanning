@@ -1,6 +1,7 @@
 # **Goal**
 In this project, the goal is to design a path planner that is able to create smooth, safe paths for the car to follow along a 3 lane highway with traffic. A successful path planner will be able to keep inside its lane, avoid hitting other cars, and pass slower moving 
-traffic all by using localization, sensor fusion, and map data.
+traffic all by using localization, sensor fusion, and map data. The project runs inside a Trinity simulator where a highway with heavy traffic and six lanes is simulated. The highway is a 6.75 miles loop where the speed limit is 50 miles per hour.  The simulator allows manual driving with the keyboard or a joystick by selecting manual mode on the operational screen where the car is driving. For this project however, we are interested by autonomous driving so we will deselect manual mode on the screen and the car will behave autonomously.
+The path planner algorithm will be steering the car. Receiving information from sensors such as LIDAR, Radars, Video Cameras the path planner keep track of the surrounding traffic and compute the car trajectory for the next 0.2 seconds and possible follow up points for the next 7 seconds.  The trajectory has to stitch smoothly with the previous points in the path to avoid stop and go as well as jerks.
 
 # **Design criteria**
 - The car must not go over the speed limit of 50mph
@@ -23,13 +24,14 @@ Make sure the Manual Mode of the simulator is not selected.
 * (5) Run the code, the car will move in the simulator. Watch how the car follows the car in front at a safe distance of 50 meters and how it changes lane when possible if the front car is slow.
 
 # **Algorithm**
-The green line in front of the car is the path planned by the algorithm. This green line is made up of green dots at 0.2 seconds intervals.The show where the car should go in the next 0.2 seconds These dots are continuously computed by the path planning algorithm and sent to the simulator. If the distance between the dots increases, the car is accelerating.
+The green line in front of the car is the path planned by the algorithm. This green line is made up of green dots at 0.2 seconds intervals.They show where the car should go in the next 0.2 seconds These dots are continuously computed by the path planning algorithm and sent to the simulator. If the distance between the dots increases, the car is accelerating. The trajectory is created by using splines between a start point (where the car is now) and where the car has to be in the immediate future. A bunch of candidate trajectories is generated between the start point and the end point. Then, a series of 14 cost functions are computed for each trajectory. The 14 costs are added to constitute the total cost of a given trajectory. The path planner eventually will choose the trajectory with the least cost.
 
 # **Key points that the path planner must meet**
 * (1) Send to the simulator every 0.2 seconds a vector of way points that stitches smoothly to the previous vector of way points so that the trajectory remains smooth.
-* (2) Keep a close look at the rapidly evolving traffic around the car to avoid collisions while driving at the optimum speed. Keeping a balance between safety and performance is difficult.
-* (3) The path planner must continuously assess the trajectory to avoid jerks and excessive acceleration or deceleration.
-* (4) The path planner must find out if and when a change of lane is in order.
+* (2) Keep a close look at the rapidly evolving traffic around the car to avoid collisions while driving at the optimum speed. Keeping a balance between safety and performance.
+* (3) The path planner must continuously assess the trajectory to avoid jerks and excessive speed, acceleration or deceleration.
+* (4) The path planner must find out if and when a change of lane is in order and safe.
+If these points are not met at any time, the simulator will detect it and a pop up window will flag the violation. In particular excessive speed, excessive acceleration, excessive jerk (lateral acceleration) and excessive time between lanes will be flagged as incident and wil restart the "No incident" timer.
 
 # **Issues and Solutions**
 * (1) The simulator was often flagging the car as "out of lane" when driving on the right lane. It appeared that this was probably an erroneous signal. However to please the simulator and silence this signal a bias of 20 centimeters was introduced for the "d" Frenet parameter when the car was driving on the right lane. 
