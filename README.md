@@ -1,27 +1,31 @@
 # **Goal**
 In this project, the goal is to design a path planner that is able to create smooth, safe paths for the car to follow along a 3 lane highway with traffic. A successful path planner will be able to keep inside its lane, avoid hitting other cars, and pass slower moving 
 traffic all by using localization, sensor fusion, and map data. The project runs inside a Trinity simulator where a highway with heavy traffic and six lanes is simulated. The highway is a 6.75 miles loop where the speed limit is 50 miles per hour.  The simulator allows manual driving with the keyboard or a joystick by selecting manual mode on the operational screen where the car is driving. For this project however, we are interested by autonomous driving so we will deselect manual mode on the screen and the car will behave autonomously.
-The path planner algorithm will be steering the car. Receiving information from sensors such as LIDAR, Radars, Video Cameras the path planner keep track of the surrounding traffic and compute the car trajectory for the next 0.2 seconds and possible follow up points for the next 7 seconds.  The trajectory has to stitch smoothly with the previous points in the path to avoid stop and go as well as jerks.
+The path planner algorithm will be steering the car. Receiving information from sensors such as LIDAR, Radars, Video Cameras the path planner keeps track of the surrounding traffic and compute the car trajectory for the next 0.2 seconds and possible follow up points for the next 7 seconds.  The trajectory has to stitch smoothly with the previous points in the path to avoid stop and go as well as jerks. 
+
+# **Bosch Udacity Challenge Path Planning winner**
+This code won the "Bosch-Udacity Path Planning Challenge" in September 20017. The Challenge involved steering an autonomous car on a simulated highway with heavy traffic for 10 miles. Fastest Time, passenger comfort (smooth trajectories and accelerations)  and safety were the criteria to win. Note that the Bosch Udacity simulator highway used for the Challenge differed from the one used here.
 
 # **Design criteria**
 - The car must not go over the speed limit of 50mph
-- The car does not exceed a total acceleration of 10 m/s^2 and a jerk of 10 m/s^3.
+- The car must not exceed a total acceleration of 10 m/s^2 and a jerk (lateral acceleration) of 10 m/s^3.
 - The car must not come into contact with any of the other cars on the road.
-- The car doesn't spend more than a 3 second time length in between lanes during changing lanes, and every other time the car stays inside one of the 3 lanes on the right hand side of the road.
-- The car is able to smoothly change lanes when it makes sense to do so, such as when behind a slower moving car and an adjacent lane is clear of other traffic.
+- The car must not spend more than a 3 second time length in between lanes when changing lanes and at every other time the car must stay inside one of the 3 lanes on the right hand side of the road.
+- The car must be able to smoothly change lanes when it makes sense to do so, such as when behind a slower moving car and an adjacent lane is clear of other traffic.
 
 # **Usage**
-When running the simulator, the car that drives autonomously is the black car in from of us.
-By clicking on the screen and moving around it is possible to change or keep the angle of the camera that looks at the car.
-Make sure the Manual Mode of the simulator is not selected.
+When running the simulator, the car that drives autonomously is the black car in front of us.
+By clicking on the screen and moving around with the mouse or finger, it is possible to change the angle of the camera that looks at the car. So we can view the car from the rear, from the top or from the front or lateral views. Since the highway is a loop, this feature comes handy to keep a full view of the car from behind and slightly up. This is the best camera position to check what the car is doing.
+Again, make sure the Manual Mode of the simulator is not selected.
 
 # **To run this code** 
-* (1) Download the simulator at https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2
-* (2) create a build directory and run Cmake ..  under build directory
+* (1) Download the simulator: git clone https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2.git
+* (2) Down load this code:  git clone https://github.com/delassus/PathPlanning.git
+* (2) create a build directory: mkdir build, cd build and run Cmake ..  under build directory
 * (3) compile the code using Xcode or make -j8
 * (4) Run the simulator, select a graphics definition, then select play!, select  project 1: path planning. Make sure that Manual mode is not selected on the screen where the car is running.
 
-* (5) Run the code, the car will move in the simulator. Watch how the car follows the car in front at a safe distance of 50 meters and how it changes lane when possible if the front car is slow.
+* (5) Run the code, the car will move in the simulator. Watch how the car follows the car in front keeping a safe distance of 50 meters and how it changes lane when possible if the front car is slow. Check how the car slows if the front car slows and how it accelerate to 49 miles an hour when possible.
 
 # **Algorithm**
 The green line in front of the car is the path planned by the algorithm. This green line is made up of green dots at 0.2 seconds intervals.They show where the car should go in the next 0.2 seconds These dots are continuously computed by the path planning algorithm and sent to the simulator. If the distance between the dots increases, the car is accelerating. The trajectory is created by using splines between a start point (where the car is now) and where the car has to be in the immediate future. A bunch of candidate trajectories is generated between the start point and the end point. Then, a series of 14 cost functions are computed for each trajectory. The 14 costs are added to constitute the total cost of a given trajectory. The path planner eventually will choose the trajectory with the least cost.
