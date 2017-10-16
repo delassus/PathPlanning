@@ -48,7 +48,7 @@ The path planner in this implementation uses two approaches simultaneously to av
 # **How the trajectory is computed**
 First a start state and an end state are computed using Frenet coordinates s and d. The start state is where the car is and the end state is 80 meters in front of us.
 Using these two bounding conditions a bunch of trajectories are computed with random perturbations.
-Then a series of cost functions evaluate these trajectories for safety performance and passenger comfort.
+Then a series of cost functions evaluate these trajectories for safety performance and passenger comfort. A weight is added for each cost function. This weight is then adjusted by trial and error for each function until a right combination is found.
 # 14 Cost functions
 * time_diff: penalizes differences between the expected time to goal and the realized time.
 * s_diff: penalizes difference between expected s and realized s.
