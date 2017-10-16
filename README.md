@@ -46,7 +46,7 @@ This issue is addressed by handling separately the transition zone 300 meters be
 The path planner in this implementation uses two approaches simultaneously to avoid collisions. First a collision risk is evaluated with a cost function by the trajectory controller. Second a continuous monitoring of the positions of other car around us is conducted. Lanes that contain cars immediately behind or immediately in front of us are simply put on a no "change lane list". No trajectory ending on such lanes are computed until these lanes are free of traffic.  
 
 # **How the trajectory is computed**
-First a start state and an end state are computed. The start state is where the car is and the end state is 80 meters in front of us.
+First a start state and an end state are computed using Frenet coordinates s and d. The start state is where the car is and the end state is 80 meters in front of us.
 Using these two bounding conditions a bunch of trajectories are computed with random perturbations.
 Then a series of cost functions evaluate these trajectories for safety performance and passenger comfort.
 # 14 Cost functions
