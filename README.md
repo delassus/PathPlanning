@@ -43,7 +43,7 @@ The path planner in this implementation uses two approaches simultaneously to av
 First a start state and an end state are computed. The start state is where the car is and the end state is 80 meters in front of us.
 Using these two bounding conditions a bunch of trajectories are computed with random perturbations.
 Then a series of cost functions evaluate these trajectories for safety performance and passenger comfort.
-# The cost functions are:
+# 14 Cost functions
 * time_diff: penalizes differences between the expected time to goal and the realized time.
 * s_diff: penalizes difference between expected s and realized s.
 * d_diff: penalizes difference between expected d and realized d;
@@ -71,4 +71,4 @@ while in the process of changing lane. Reverting to the original lane was often 
 
 # Oncoming Traffic
 * The traffic in the simulator has been designed to be randomly aggressive. Often other cars do not follow safe driving rules. Sometimes they collide or even run into you. As much as possible we have to avoid collision. Sometimes it is not possible.
-# As a final comment, many hours of testing show that the average time of avoiding another car deliberately crashing into you is less than 51 minutes. The probablity of survival on this loop is under an hour! Given these conditions, avoiding crash for 20 minutes is a reasonable goal.
+* As a final comment, many hours of testing show that the average time of avoiding another car deliberately crashing into you is less than 51 minutes. The probablity of survival on this loop is under an hour! Given these conditions, avoiding crash for 20 minutes is a reasonable goal.
